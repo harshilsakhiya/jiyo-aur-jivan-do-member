@@ -270,11 +270,15 @@ const TabAccount = () => {
                     />
                   </DatePickerWrapper>
                 </Grid>
+                <Grid item xs={12} sm={12}>
+                  <Typography sx={{ fontWeight: 600 }}>Children Details</Typography>
+                </Grid>
                 <Grid item xs={12}>
                   <Button variant='contained' sx={{ marginRight: 3.5 }} onClick={addChildren}>
                     Add Children
                   </Button>
                 </Grid>
+
                 <Grid item xs={12}>
                   <FieldArray
                     name='friends'
@@ -338,25 +342,6 @@ const TabAccount = () => {
                   />
                 </Grid>
               </>
-            ) : null}
-
-            {openAlert ? (
-              <Grid item xs={12} sx={{ mb: 3 }}>
-                <Alert
-                  severity='warning'
-                  sx={{ '& a': { fontWeight: 400 } }}
-                  action={
-                    <IconButton size='small' color='inherit' aria-label='close' onClick={() => setOpenAlert(false)}>
-                      <Close fontSize='inherit' />
-                    </IconButton>
-                  }
-                >
-                  <AlertTitle>Your email is not confirmed. Please check your inbox.</AlertTitle>
-                  <Link href='/' onClick={e => e.preventDefault()}>
-                    Resend Confirmation
-                  </Link>
-                </Alert>
-              </Grid>
             ) : null}
 
             <Grid item xs={12}>
