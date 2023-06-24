@@ -324,7 +324,11 @@ const TabAccount = () => {
                     />
                   </DatePickerWrapper>
                 </Grid>
-                <Grid item xs={12} sm={12}>
+                
+              </>
+            ) : null}
+
+<Grid item xs={12} sm={12}>
                   <Typography sx={{ fontWeight: 600 }}>Children Details</Typography>
                 </Grid>
                 <Grid item xs={12}>
@@ -438,8 +442,6 @@ const TabAccount = () => {
                     )}
                   />
                 </Grid>
-              </>
-            ) : null}
 
             <Grid item xs={12}>
               <Button variant='contained' sx={{ marginRight: 3.5 }}>
