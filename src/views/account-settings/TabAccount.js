@@ -1,5 +1,5 @@
 // ** React Imports
-import { forwardRef, useState } from 'react'
+import { forwardRef, useCallback, useMemo, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -53,6 +53,16 @@ const ResetButtonStyled = styled(Button)(({ theme }) => ({
   }
 }))
 
+const ReMoveButtonStyled = styled(Button)(({ theme }) => ({
+  marginLeft: theme.spacing(4.5),
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    marginLeft: 0,
+    textAlign: 'center',
+    marginTop: theme.spacing(4)
+  }
+}))
+
 const CustomInput = forwardRef((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
 })
@@ -64,23 +74,25 @@ const TabAccount = () => {
   const [wifePhoto, setWifePhoto] = useState('/images/avatars/1.png')
   const [date, setDate] = useState(null)
   const [wifeDOB, setWifeDOB] = useState(null)
-
-  const childrenInitialValues = {
-    name: '',
-    schoolName: '',
-    dateOfBirth: '',
-    ProfileSrc: '',
-    Email: ''
-  }
   const [childrens, setChildrens] = useState([])
+
+  const childrenInitialValues = useMemo(
+    () => ({
+      name: '',
+      schoolName: '',
+      dateOfBirth: null,
+      ProfileSrc: '/images/avatars/1.png',
+      Email: ''
+    }),
+    []
+  )
 
   const { values, handleBlur, handleChange, handleSubmit } = useFormik({
     enableReinitialize: true,
     initialValues: {
       name: 'John Doe',
       email: 'johnDoe@example.com',
-      maritalStatus: 'unmarried',
-      friends: ['jared']
+      maritalStatus: 'unmarried'
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Please Enter Name'),
@@ -92,8 +104,7 @@ const TabAccount = () => {
     }
   })
 
-  const onChange = (file, key) => {
-    console.log(file, key)
+  const onChange = useCallback((file, key) => {
     const reader = new FileReader()
     const { files } = file.target
     if (files && files.length !== 0) {
@@ -103,11 +114,54 @@ const TabAccount = () => {
       }
       reader.readAsDataURL(files[0])
     }
-  }
+  }, [])
 
-  const addChildren = () => {
+  const setChildrenProfile = useCallback(
+    (file, index) => {
+      const existingChildrens = [...childrens]
+      const reader = new FileReader()
+      const { files } = file.target
+      if (files && files.length !== 0) {
+        reader.onload = () => {
+          existingChildrens[index].ProfileSrc = reader.result
+          setChildrens(existingChildrens)
+        }
+        reader.readAsDataURL(files[0])
+      }
+    },
+    [childrens]
+  )
+
+  const addChildren = useCallback(() => {
     setChildrens([...childrens, childrenInitialValues])
-  }
+  }, [childrens, childrenInitialValues])
+
+  const removeChildren = useCallback(
+    index => {
+      const existingChildren = [...childrens]
+      existingChildren.splice(index, 1)
+      setChildrens(existingChildren)
+    },
+    [childrens]
+  )
+
+  const resetChildrenProfile = useCallback(
+    index => {
+      const existingChildrens = [...childrens]
+      existingChildrens[index].ProfileSrc = '/images/avatars/1.png'
+      setChildrens(existingChildrens)
+    },
+    [childrens]
+  )
+
+  const changeDOBofChildren = useCallback(
+    (date, index) => {
+      const existingChildrens = [...childrens]
+      existingChildrens[index].dateOfBirth = date
+      setChildrens(existingChildrens)
+    },
+    [childrens]
+  )
 
   return (
     <CardContent>
@@ -283,6 +337,49 @@ const TabAccount = () => {
                         {childrens?.map((children, index) => (
                           <>
                             <Grid item xs={12} sm={6}>
+                              <Typography sx={{ fontWeight: 600 }}>Children {index + 1}</Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                              <ReMoveButtonStyled
+                                color='error'
+                                variant='outlined'
+                                onClick={() => removeChildren(index)}
+                              >
+                                Remove Children
+                              </ReMoveButtonStyled>
+                            </Grid>
+                            <Grid item xs={12} sm={12}>
+                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <ImgStyled src={children.ProfileSrc} alt='Profile Pic' />
+                                <Box>
+                                  <ButtonStyled
+                                    component='label'
+                                    variant='contained'
+                                    htmlFor={`account-settings-upload-children-image-${index}`}
+                                  >
+                                    Upload New Photo
+                                    <input
+                                      hidden
+                                      type='file'
+                                      onChange={e => setChildrenProfile(e, index)}
+                                      accept='image/png, image/jpeg'
+                                      id={`account-settings-upload-children-image-${index}`}
+                                    />
+                                  </ButtonStyled>
+                                  <ResetButtonStyled
+                                    color='error'
+                                    variant='outlined'
+                                    onClick={() => resetChildrenProfile(index)}
+                                  >
+                                    Reset
+                                  </ResetButtonStyled>
+                                  <Typography variant='body2' sx={{ marginTop: 5 }}>
+                                    Allowed PNG or JPEG. Max size of 800K.
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
                               <TextField
                                 fullWidth
                                 type='text'
@@ -309,13 +406,13 @@ const TabAccount = () => {
                             <Grid item xs={12} sm={6}>
                               <DatePickerWrapper>
                                 <DatePicker
-                                  selected={date}
+                                  selected={children.dateOfBirth}
                                   showYearDropdown
                                   showMonthDropdown
                                   id={`account-settings-date-children-${index}`}
                                   placeholderText='MM-DD-YYYY'
                                   customInput={<CustomInput />}
-                                  onChange={date => setDate(date)}
+                                  onChange={date => changeDOBofChildren(date, index)}
                                 />
                               </DatePickerWrapper>
                             </Grid>
