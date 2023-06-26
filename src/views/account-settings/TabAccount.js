@@ -90,8 +90,8 @@ const TabAccount = () => {
   const { values, handleBlur, handleChange, handleSubmit } = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: 'John Doe',
-      email: 'johnDoe@example.com',
+      name: '',
+      email: '',
       maritalStatus: 'unmarried'
     },
     validationSchema: Yup.object({
@@ -208,8 +208,8 @@ const TabAccount = () => {
                 name='name'
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder='John Doe'
-                defaultValue='John Doe'
+                placeholder='Name'
+                // defaultValue='John Doe'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -220,8 +220,8 @@ const TabAccount = () => {
                 label='Email'
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder='johnDoe@example.com'
-                defaultValue='johnDoe@example.com'
+                placeholder='Email'
+                // defaultValue='johnDoe@example.com'
               />
               <ErrorMessage name='username' component='div' />
             </Grid>
@@ -294,8 +294,8 @@ const TabAccount = () => {
                     name='name'
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder='John Doe'
-                    defaultValue='John Doe'
+                    placeholder='Name'
+                    // defaultValue='John Doe'
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -306,8 +306,8 @@ const TabAccount = () => {
                     label='Email'
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder='johnDoe@example.com'
-                    defaultValue='johnDoe@example.com'
+                    placeholder='Email'
+                    // defaultValue='johnDoe@example.com'
                   />
                   <ErrorMessage name='username' component='div' />
                 </Grid>
@@ -394,8 +394,8 @@ const TabAccount = () => {
                                 label='Name'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                placeholder='john Doe'
-                                defaultValue='John Doe'
+                                placeholder='Name'
+                                // defaultValue='John Doe'
                               />
                               <ErrorMessage name='username' component='div' />
                             </Grid>
@@ -406,8 +406,8 @@ const TabAccount = () => {
                                 label='School Name'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                placeholder='john Doe'
-                                defaultValue='S.D. Jain School'
+                                placeholder='School Name'
+                                // defaultValue='S.D. Jain School'
                               />
                               <ErrorMessage name='username' component='div' />
                             </Grid>
@@ -431,8 +431,8 @@ const TabAccount = () => {
                                 label='Email'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                placeholder='johnDoe@example.com'
-                                defaultValue='johnDoe@example.com'
+                                placeholder='Email'
+                                // defaultValue='johnDoe@example.com'
                               />
                               <ErrorMessage name='username' component='div' />
                             </Grid>
